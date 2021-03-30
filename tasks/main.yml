@@ -1,0 +1,30 @@
+---
+
+- name: create vm from template
+  vmware_guest:
+    validate_certs: false
+    datacenter: demolab
+    state: poweredon
+    template: "{{ rhel_version }}_template_{{ template_version }}"
+    name: "{{ inventory_hostname }}"
+    cluster: "{{ cluster }}"
+    folder: molecule
+    datastore: "{{ datastore }}"
+    hardware:
+      memory_mb: "{{ memory }}"
+      num_cpus: "{{ cpu_cores }}"
+    networks:
+      - name: infra
+        type: static
+        netmask: 255.255.252.0
+        gateway: 10.50.0.254
+        ip: "{{ vm_ip }}"
+    customization:
+      domain: "{{ demolab_domain }}"
+      dns_servers:
+        - 10.50.0.173
+      dns_suffix:
+        - "{{ demolab_domain }}"
+    wait_for_ip_address: true
+  register: vm
+  delegate_to: localhost

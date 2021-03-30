@@ -1,0 +1,30 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: delegated
+platforms:
+  - name: molecule-rhel8.demolab.local
+  - name: molecule-rhel7.demolab.local
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        cluster: rhnode2
+        memory: 2048
+        cpu_cores: 2
+        demolab_domain: demolab.local
+        datastore: datastore1
+        template_version: 50
+    host_vars:
+      molecule-rhel8.demolab.local:
+        rhel_version: rhel8
+        vm_ip: 10.50.0.200
+      molecule-rhel7.demolab.local:
+        rhel_version: rhel7
+        vm_ip: 10.50.0.201
+verifier:
+  name: ansible
+lint: |
+  ansible-lint --exclude molecule/default/
